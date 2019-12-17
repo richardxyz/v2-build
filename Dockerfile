@@ -3,40 +3,32 @@ FROM golang:latest as builder
 MAINTAINER Richard Xie
 
 RUN go get -insecure -u v2ray.com/core/... \
-	&& mkdir -p /usr/bin/v2ray/ \
-	&& apt -qy install curl \
-	&& curl https://bazel.build/bazel-release.pub.gpg |  apt-key add - \
+	&& mkdir /v2ray \
+	&& wget  https://bazel.build/bazel-release.pub.gpg -O - |  apt-key add - \
 	&& echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc/apt/sources.list.d/bazel.list \
 	&& apt update \
-	&& apt -qy install bazel \
+	&& apt -qy install bazel xz-utils \
+	&& cd /tmp \
+	&& wget -c https://github.com/upx/upx/releases/download/v3.95/upx-3.95-amd64_linux.tar.xz \
+	&& tar -Jxf upx-3.95-amd64_linux.tar.xz \
+	&& cp upx-3.95-amd64_linux/upx  ${GOPATH}/bin/ \
+	&& rm -rf /tmp/upx* \
+	&& cd ${GOPATH}/src/v2ray.com/core/ \
+	&& sed -i 's/_ "v2ray.com\/core\/main\/json"/\/\/ &/g; s/\/\/ _ "v2ray.com\/core\/main\/jsonem"/_ "v2ray.com\/core\/main\/jsonem"/g' main/distro/all/all.go \
+	&& bazel clean \
+	&& bazel build --action_env=GOPATH=$GOPATH --action_env=PATH=$PATH //release:v2ray_linux_mipsle_package \
+	&& cd  ${GOPATH}/src/v2ray.com/core/bazel-bin/release/ \
+	&& unzip v2ray-linux-mipsle.zip \
+	&& upx -k --best --lzma -o /v2ray/v2ray v2ray_softfloat \	
+	&& cd /v2ray \
+	&& md5sum v2ray >v2ray.md5 \
+	&& grep -oP "(?<=version  = \").+?(?=\")" ${GOPATH}/src/v2ray.com/core/core.go >version.txt \ 
+	&& cd ${GOPATH}/src/v2ray.com/core/ \
+	&& cat main/distro/all/all.go \
+	&& bazel clean \
 	&& rm -rf /var/lib/apt/lists/* 
 
+FROM alpine
 
-
-#RUN CGO_ENABLED=0 go build -o /usr/bin/v2ray/v2ray v2ray.com/core/main
-#RUN CGO_ENABLED=0 go build -o /usr/bin/v2ray/v2ctl v2ray.com/core/infra/control/main
-#RUN cp -r ${GOPATH}/src/v2ray.com/core/release/config/* /usr/bin/v2ray/
-
-#FROM alpine
-
-#RUN apk update
-#RUN apk upgrade
-#RUN apk add ca-certificates && update-ca-certificates
-## Change TimeZone
-#RUN apk add --update tzdata
-#ENV TZ=Asia/Shanghai
-## Clean APK cache
-#RUN rm -rf /var/cache/apk/*
-
-#RUN mkdir /usr/bin/v2ray/
-#RUN mkdir /etc/v2ray/
-#RUN mkdir /var/log/v2ray/
-
-#COPY --from=builder /usr/bin/v2ray  /usr/bin/v2ray
-
-#ENV PATH /usr/bin/v2ray/:$PATH
-
-#EXPOSE 8000
-#COPY config.json /etc/v2ray/config.json
-
-#CMD ["/usr/bin/v2ray/v2ray", "-config=/etc/v2ray/config.json"]
+RUN mkdir /v2ray
+COPY --from=builder /v2ray /v2ray
