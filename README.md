@@ -8,14 +8,14 @@
 - tested on phicomm K2 and padavan
 
 ## Files
-- /v2ray/v2ray   
-- /v2ray/v2ray.md5
-- /v2ray/version.txt
+- /dist/v2ray   
+- /dist/v2ray.md5
+- /dist/version.txt
 
 ## How to use
 
 ```
- docker run --rm -v $(pwd):/mnt free9080/v2 cp -r /v2ray /mnt/ 
+ docker run --rm -v $(pwd):/mnt free9080/v2 cp -r /dist /mnt/ 
 ```
 
 ## Thanks
