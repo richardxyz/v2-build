@@ -30,5 +30,5 @@ RUN go get -insecure -u v2ray.com/core/... \
 
 FROM alpine
 
-RUN mkdir /v2ray
-COPY --from=builder /v2ray /v2ray
+RUN mkdir /dist
+COPY --from=builder /v2ray /dist
