@@ -17,7 +17,7 @@ RUN go get -insecure -u v2ray.com/core/... \
 	&& sed -i 's/_ "v2ray.com\/core\/main\/json"/\/\/ &/g; s/\/\/ _ "v2ray.com\/core\/main\/jsonem"/_ "v2ray.com\/core\/main\/jsonem"/g' main/distro/all/all.go \
 	&& bazel clean \
 	&& export HOME=${GOPATH}/src/v2ray.com/core/bazel-bin/release/ \
-	&& bazel build --action_env=PATH=$PATH --action_env=SPWD=$PWD --action_env=GOPATH=$(go env GOPATH) --action_env=GOCACHE=$(go env GOCACHE) --spawn_strategy --sandbox_debug //release:v2ray_linux_mips32le_package \
+	&& bazel build --action_env=PATH=$PATH --action_env=SPWD=$PWD --action_env=GOPATH=$(go env GOPATH) --action_env=GOCACHE=$(go env GOCACHE) --spawn_strategy local //release:v2ray_linux_mips32le_package \
 	&& cd  ${GOPATH}/src/v2ray.com/core/bazel-bin/release/ \
 	&& unzip v2ray-linux-mips32le.zip \
 	&& upx -k --best --lzma -o /v2ray/v2ray v2ray_softfloat \
