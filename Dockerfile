@@ -18,7 +18,7 @@ RUN go get -insecure -u v2ray.com/core/... \
 	&& wget -c https://raw.githubusercontent.com/v2ray/v2ray-core/11dddd9864b97ed381eac59eeb788baff2f20624/infra/bazel/build.bzl \
 	&& mv build.bzl infra/bazel/build.bzl \
 	&& bazel clean \
-	&& bazel build --action_env=GOPATH=$GOPATH --action_env=PATH=$PATH //release:v2ray_linux_mipsle_package \
+	&& bazel build --action_env=GOPATH=$GOPATH --action_env=PATH=$PATH //release:v2ray_linux_mips32le_package \
 	&& cd  ${GOPATH}/src/v2ray.com/core/bazel-bin/release/ \
 	&& unzip v2ray-linux-mipsle.zip \
 	&& upx -k --best --lzma -o /v2ray/v2ray v2ray_softfloat \	
