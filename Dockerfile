@@ -19,7 +19,7 @@ RUN go get -insecure -u v2ray.com/core/... \
 	&& export HOME=/v2ray/zip \
 	&& bazel build --action_env=PATH=$PATH --action_env=SPWD=$PWD --action_env=GOPATH=$(go env GOPATH) --action_env=GOCACHE=$(go env GOCACHE) --spawn_strategy local //release:v2ray_linux_mips32le_package \
 	&& cd  /v2ray/zip \
-	&& find / -name "v2ray*zip" \
+	&& find -name "v2ray*zip" -exec mv -t . {} + \
 	&& unzip v2ray-linux-mips32le.zip  && ls -l \
 	&& upx -k --best --lzma -o /v2ray/v2ray v2ray_softfloat \
 	&& cd /v2ray \
