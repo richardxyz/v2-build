@@ -15,7 +15,6 @@ RUN go get -insecure -u v2ray.com/core/... \
 	&& rm -rf /tmp/upx* \
 	&& cd ${GOPATH}/src/v2ray.com/core/ \
 	&& sed -i 's/_ "v2ray.com\/core\/main\/json"/\/\/ &/g; s/\/\/ _ "v2ray.com\/core\/main\/jsonem"/_ "v2ray.com\/core\/main\/jsonem"/g' main/distro/all/all.go \
-	&& mv build.bzl infra/bazel/build.bzl \
 	&& bazel clean \
 	&& bazel build --action_env=GOPATH=$GOPATH --action_env=PATH=$PATH //release:v2ray_linux_mipsle_package \
 	&& cd  ${GOPATH}/src/v2ray.com/core/bazel-bin/release/ \
