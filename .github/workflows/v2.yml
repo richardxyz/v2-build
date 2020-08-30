@@ -22,7 +22,7 @@ jobs:
     - name: Debug
       run: |
         pwd
-        echo ${go env GOPATH}
+        echo $(go env GOPATH)
         echo ${GOROOT}
 
     - name: Check out code into the Go module directory
