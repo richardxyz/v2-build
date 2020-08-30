@@ -19,6 +19,12 @@ jobs:
         go-version: ^1.15
       id: go
 
+    - name: Debug
+      run: |
+        pwd
+        echo ${GOPATH}
+        echo ${GOROOT}
+
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
@@ -37,7 +43,14 @@ jobs:
 
     - name: Build source
       run: |
+        pwd
+        echo ${GOPATH}
+        echo ${GOROOT}
+        echo ${HOME}
+        echo ${GOCACHE}
+        export GOPATH=$(go env GOPATH) 
         go get -insecure -u v2ray.com/core/...
+        ls -l
         cd ${GOPATH}/src/v2ray.com/core/
         sed -i 's/_ "v2ray.com\/core\/main\/json"/\/\/ &/g; s/\/\/ _ "v2ray.com\/core\/main\/jsonem"/_ "v2ray.com\/core\/main\/jsonem"/g' main/distro/all/all.go
         bazel clean
