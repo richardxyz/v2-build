@@ -35,11 +35,23 @@ jobs:
 
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
-
-    - name: Get dependencies
+      
+    - id: mos
+      name: Get Mos-chinadns Latest Releas
+      uses: pozetroninc/github-action-get-latest-release@master
+      with:
+        owner: IrineSistiana
+        repo: mos-chinadns
+      
+    - name: Update mos-chinadns
       run: |
+        echo "${{ steps.mos.outputs.release }}"
         mkdir -p /opt/v2
-
+        MOS_VER=${{ steps.keydb.outputs.release }} wget https://github.com/IrineSistiana/mos-chinadns/releases/download/${MOS_VER}/mos-chinadns-linux-mipsle-softfloat.zip -q -O -|unzip -
+        chmod +x mos-chinadns
+        upx -9 mos-chinadns
+        cp -f mos-chinadns ./v2/
+        
     - name: Build source
       run: |
         export GOPATH=$(go env GOPATH) 
