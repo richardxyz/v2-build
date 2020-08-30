@@ -45,9 +45,10 @@ jobs:
       
     - name: Update mos-chinadns
       run: |
-        echo "${{ steps.mos.outputs.release }}"
         mkdir -p /opt/v2
-        MOS_VER=${{ steps.keydb.outputs.release }} wget https://github.com/IrineSistiana/mos-chinadns/releases/download/${MOS_VER}/mos-chinadns-linux-mipsle-softfloat.zip -qc
+        
+        MOS_VER = "${{ steps.keydb.outputs.release }}"
+        wget https://github.com/IrineSistiana/mos-chinadns/releases/download/${MOS_VER}/mos-chinadns-linux-mipsle-softfloat.zip -qc
         unzip -fo mos-chinadns-linux-mipsle-softfloat.zip mos-chinadns 
         chmod +x mos-chinadns
         upx -9 mos-chinadns
