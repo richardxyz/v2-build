@@ -30,11 +30,11 @@ jobs:
 
     - name: Get dependencies
       run: |
-        export GOPATH=$(go env GOPATH) 
         mkdir -p /opt/v2
 
     - name: Build source
       run: |
+        export GOPATH=$(go env GOPATH) 
         go get -insecure -u v2ray.com/core/...
         cd ${GOPATH}/src/v2ray.com/core/
         sed -i 's/_ "v2ray.com\/core\/main\/json"/\/\/ &/g; s/\/\/ _ "v2ray.com\/core\/main\/jsonem"/_ "v2ray.com\/core\/main\/jsonem"/g' main/distro/all/all.go
