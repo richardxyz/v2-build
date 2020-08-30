@@ -47,7 +47,7 @@ jobs:
       run: |
         mkdir -p /opt/v2
         wget -qc "https://github.com/IrineSistiana/mos-chinadns/releases/download/${{ steps.mos.outputs.release }}/mos-chinadns-linux-mipsle-softfloat.zip"
-        unzip -fo mos-chinadns-linux-mipsle-softfloat.zip 
+        unzip -n mos-chinadns-linux-mipsle-softfloat.zip 
         ls -l
         chmod +x mos-chinadns
         upx -9 mos-chinadns
