@@ -1,0 +1,53 @@
+name: Go
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.15
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Get dependencies
+      run: |
+        go get -insecure -u v2ray.com/core/...
+        mkdir -p /v2ray/zip
+        wget -qc https://bazel.build/bazel-release.pub.gpg  -O - |  apt-key add -
+        echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc/apt/sources.list.d/bazel.list
+        apt update
+        apt -qy install bazel xz-utils
+        cd /tmp
+        wget -qc https://github.com/upx/upx/releases/download/v3.95/upx-3.95-amd64_linux.tar.xz
+        tar -Jxf upx-3.95-amd64_linux.tar.xz
+        cp upx-3.95-amd64_linux/upx  ${GOPATH}/bin/
+        rm -rf /tmp/upx*
+        cd ${GOPATH}/src/v2ray.com/core/
+        sed -i 's/_ "v2ray.com\/core\/main\/json"/\/\/ &/g; s/\/\/ _ "v2ray.com\/core\/main\/jsonem"/_ "v2ray.com\/core\/main\/jsonem"/g' main/distro/all/all.go
+        bazel clean
+        export HOME=/v2ray/zip
+        bazel build --action_env=PATH=$PATH --action_env=SPWD=$PWD --action_env=GOPATH=$(go env GOPATH) --action_env=GOCACHE=$(go env GOCACHE) --spawn_strategy local //release:v2ray_linux_mips32le_package
+        cd  /v2ray/zip
+        find -name "v2ray*zip" -exec mv -t . {} +
+        unzip v2ray-linux-mips32le.zip
+        upx -k --best --lzma -o /v2ray/v2ray v2ray_softfloat
+
+    - name : Upload packages
+      uses: actions/upload-artifact@master
+      if: always()
+      with:
+        name: V2-package
+        path: /v2ray
