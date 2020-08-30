@@ -1,10 +1,17 @@
 name: Go
 
 on:
+  release:
+    types: [published]
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    tags:
+    - 'v*'
+  #  branches: 
+  #    - master
+#  schedule:
+#    - cron: 0 8 * * 5
+  watch:
+    types: [started]
 
 jobs:
 
@@ -43,11 +50,10 @@ jobs:
     
     - name: Compress binary
       run: |
-        cd  $HOME
         find -name "v2ray*zip" -exec mv -t . {} +
         unzip v2ray-linux-mips32le.zip
         upx -k --best --lzma -o /opt/v2/v2ray v2ray_softfloat
-        cp -f /opt/v2/v2ray $HOME/v2/ 
+        cp -f /opt/v2/v2ray ./v2/ 
 
     - name: Zip Release
       uses: TheDoctor0/zip-release@0.4.1
