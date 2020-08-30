@@ -1,4 +1,4 @@
-name: Go
+name: V2
 
 on:
   release:
@@ -31,6 +31,7 @@ jobs:
         pwd
         echo $(go env GOPATH)
         echo ${GOROOT}
+        echo ${HOME}
 
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
@@ -50,7 +51,7 @@ jobs:
     
     - name: Compress binary
       run: |
-        find -name "v2ray*zip" -exec mv -t . {} +
+        find $HOME -name "v2ray*zip" -exec mv -t . {} +
         unzip v2ray-linux-mips32le.zip
         upx -k --best --lzma -o /opt/v2/v2ray v2ray_softfloat
         cp -f /opt/v2/v2ray ./v2/ 
@@ -68,7 +69,7 @@ jobs:
         name: V2-package
         path: ./v2.zip
 
-    - name: deploy file to test server
+    - name: Deploy file to server
       uses: wlixcc/SFTP-Deploy-Action@v1.0
       with:
           username: 'ubuntu'
