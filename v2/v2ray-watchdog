@@ -1,0 +1,17 @@
+#!/bin/sh
+V2DIR=.
+cd ${V2DIR}
+while true; do
+	pid=$(ps | grep mos-chinadns|grep -v grep)
+	if [ "$pid" == "" ]; then
+		        ${V2DIR}/mos-chinadns >/dev/null  2>&1 &
+	fi
+
+	sleep 60
+
+        pid=$(ps | awk '/[v]2ray --config/{print $1}')
+        if [ "$pid" == "" ]; then
+    		${V2DIR}/start.sh
+	fi
+
+done

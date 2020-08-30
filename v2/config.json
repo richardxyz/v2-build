@@ -1,0 +1,116 @@
+{
+"log": {
+ "loglevel": "info"
+},
+    "inbounds": [
+        {
+            "port": 1234,
+            "listen": "0.0.0.0",
+            "protocol": "dokodemo-door",
+            "settings": {
+                "network": "tcp",
+                "followRedirect": true
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls"
+                ]
+            }
+       }
+],
+"outbounds": [
+        {
+            "protocol": "freedom",
+            "tag": "direct"
+        },
+        {
+            "protocol": "blackhole",
+            "tag": "block"
+        },
+        {
+            "protocol": "vless",
+            "tag": "proxy",
+            "settings": {
+                "vnext": [
+		    {
+                        "address": "www.woxihuan.gq",
+                        "port": 443,
+                        "users": [
+                            {
+                                "id": "a4f0879a-cc22-11e9-addc-022b2d00e40b",
+                                "level": 0,
+                                "encryption": "none"
+                            }
+                        ]
+                    }
+				
+                ]
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "tls",
+                "tlsSettings": {
+                    "allowInsecure": true,
+                    "serverName": ""
+                },
+                "wsSettings": {
+                    "path": "/chat/",
+                    "headers": {
+                        "Host": ""
+                    }
+                }
+            },
+            "mux": {
+                "enabled": true
+            }
+        }
+    ],
+    "routing": {
+        "rules": [
+            {
+                "domain": ["ext:h2y.dat:ad"],
+                "type": "field",
+                "outboundTag": "block"
+            },            
+            {
+                "type": "field",
+                "outboundTag": "proxy",//被gfw屏蔽的域名走代理
+                "domain": [
+                    "ext:h2y.dat:gfw",
+                    "domain:uptodown.com",
+                    "domain:hbomax.com",
+                    "domain:hbogo.com",
+                    "domain:github.com",
+                    "domain:gitlab.com",
+                    "domain:cloudfront.net",
+		     "domain:live.com",
+		     "domain:docker.com"
+                ]
+            },
+            {
+                "type": "field",
+                "outboundTag": "proxy",//代理TELEGRAM
+                    "ip": [
+                    "91.108.12.0/22",
+                    "149.154.172.0/22",
+                    "91.108.16.0/22",
+                    "91.108.56.0/23",
+                    "149.154.168.0/22",
+                    "91.108.4.0/22",
+                    "91.108.8.0/22",
+                    "91.108.56.0/22",
+                    "149.154.160.0/20",
+                    "149.154.164.0/22"
+                ]
+            },
+            {
+                "type": "field",
+                "network": "tcp,udp",
+                "outboundTag": "direct"//默认直连
+            }
+        ]
+    }
+}
+

@@ -1,0 +1,158 @@
+dispatcher:
+     bind: ["udp://0.0.0.0:53","tcp://0.0.0.0:53"]
+upstream:
+     local:
+        addr: "223.5.5.5:53"
+        protocol: "tcp"
+        socks5: ""
+        tcp:
+            idle_timeout: 10
+        dot:
+            server_name: "dns.alidns.com"
+            idle_timeout: 10
+        doh:
+            url: "https://223.5.5.5/dns-query"
+            
+        deduplicate: true
+        max_concurrent_queries: 0
+
+        edns0:
+            client_subnet: ""
+            overwrite_ecs: false
+
+        policies:
+            deny_unhandlable_types: false
+            domain: "deny:./gw.list"
+            deny_error_rcode: true
+            check_cname: true
+            deny_empty_ip_reply: true
+            ip: "deny:./blackip.list"
+            
+     cloudflare:
+        addr: "1.0.0.1:53"
+        protocol: "tcp"
+        socks5: ""
+        tcp:
+            idle_timeout: 10
+        dot:
+            server_name: "cloudflare-dns.com"
+            idle_timeout: 10
+        doh:
+            url: "https://1.0.0.1/dns-query"
+        deduplicate: true
+        max_concurrent_queries: 0
+
+        edns0:
+            client_subnet: ""
+            overwrite_ecs: false
+
+        policies:
+            deny_unhandlable_types: false
+            domain: "" # deny:./chn_domain.list chn_domain.list里的域名无需remote解析。
+            deny_error_rcode: true
+            check_cname: true
+            deny_empty_ip_reply: true
+            ip: "deny:./blackip.list"
+            
+     containerpi-dot:
+        addr: "45.77.180.10:853"
+        protocol: "dot"
+        socks5: ""
+        tcp:
+            idle_timeout: 10
+        dot:
+            server_name: "dns.containerpi.com"
+            idle_timeout: 10
+        doh:
+            url: "https://doh.opendns.com/dns-query"
+        deduplicate: true
+        max_concurrent_queries: 0
+
+        edns0:
+            client_subnet: ""
+            overwrite_ecs: false
+
+        policies:
+            deny_unhandlable_types: false
+            domain: ""
+            deny_error_rcode: true
+            check_cname: true
+            deny_empty_ip_reply: true
+            ip: ""    
+     containerpi-doh:
+        addr: "45.77.180.10:443"
+        protocol: "doh"
+        socks5: ""
+        tcp:
+            idle_timeout: 10
+        dot:
+            server_name: "dns.containerpi.com"
+            idle_timeout: 10
+        doh:
+            url: "https://dns.containerpi.com/dns-query"
+        deduplicate: true
+        max_concurrent_queries: 0
+
+        edns0:
+            client_subnet: ""
+            overwrite_ecs: false
+
+        policies:
+            deny_unhandlable_types: false
+            domain: ""
+            deny_error_rcode: true
+            check_cname: true
+            deny_empty_ip_reply: true
+            ip: ""
+     cloudflare-dot:
+        addr: "1.0.0.1:853"
+        protocol: "dot"
+        socks5: ""
+        tcp:
+            idle_timeout: 10
+        dot:
+            server_name: "cloudflare-dns.com"
+            idle_timeout: 10
+        doh:
+            url: "https://1.0.0.1/dns-query"
+        deduplicate: true
+        max_concurrent_queries: 0
+
+        edns0:
+            client_subnet: ""
+            overwrite_ecs: false
+
+        policies:
+            deny_unhandlable_types: false
+            domain: "" # deny:./chn_domain.list chn_domain.list里的域名无需remote解析。
+            deny_error_rcode: true
+            check_cname: true
+            deny_empty_ip_reply: true
+            ip: ""
+     cloudflare-doh:
+        addr: "1.0.0.1:443"
+        protocol: "doh"
+        socks5: ""
+        tcp:
+            idle_timeout: 10
+        dot:
+            server_name: "cloudflare-dns.com"
+            idle_timeout: 10
+        doh:
+            url: "https://1.0.0.1/dns-query"
+        deduplicate: true
+        max_concurrent_queries: 0
+
+        edns0:
+            client_subnet: ""
+            overwrite_ecs: false
+
+        policies:
+            deny_unhandlable_types: false
+            domain: "" # deny:./chn_domain.list chn_domain.list里的域名无需remote解析。
+            deny_error_rcode: true
+            check_cname: true
+            deny_empty_ip_reply: true
+            ip: ""                                           
+ca:
+    path: []
