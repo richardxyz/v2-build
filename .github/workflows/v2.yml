@@ -24,7 +24,6 @@ jobs:
 
     - name: Get dependencies
       run: |
-        go get -insecure -u v2ray.com/core/...
         mkdir -p /opt/v2/zip
         wget -qc https://bazel.build/bazel-release.pub.gpg  -O - |  sudo apt-key add -
         echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
@@ -33,18 +32,25 @@ jobs:
         cd /tmp
         wget -qc https://github.com/upx/upx/releases/download/v3.95/upx-3.95-amd64_linux.tar.xz
         tar -Jxf upx-3.95-amd64_linux.tar.xz
-        cp upx-3.95-amd64_linux/upx  ${GOPATH}/bin/
+        sudo cp upx-3.95-amd64_linux/upx  ${GOPATH}/bin/
         rm -rf /tmp/upx*
+
+    - name: Build source
+      run: |
+        go get -insecure -u v2ray.com/core/...
         cd ${GOPATH}/src/v2ray.com/core/
         sed -i 's/_ "v2ray.com\/core\/main\/json"/\/\/ &/g; s/\/\/ _ "v2ray.com\/core\/main\/jsonem"/_ "v2ray.com\/core\/main\/jsonem"/g' main/distro/all/all.go
         bazel clean
         export HOME=/opt/v2/zip
         bazel build --action_env=PATH=$PATH --action_env=SPWD=$PWD --action_env=GOPATH=$(go env GOPATH) --action_env=GOCACHE=$(go env GOCACHE) --spawn_strategy local //release:v2ray_linux_mips32le_package
+    
+    - name: Compress binary
+      run: |
         cd  /opt/v2/zip
         find -name "v2ray*zip" -exec mv -t . {} +
         unzip v2ray-linux-mips32le.zip
         upx -k --best --lzma -o /opt/v2/v2ray v2ray_softfloat
-
+        
     - name : Upload packages
       uses: actions/upload-artifact@master
       if: always()
