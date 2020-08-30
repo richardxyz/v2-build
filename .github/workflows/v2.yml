@@ -47,10 +47,26 @@ jobs:
         find -name "v2ray*zip" -exec mv -t . {} +
         unzip v2ray-linux-mips32le.zip
         upx -k --best --lzma -o /opt/v2/v2ray v2ray_softfloat
-        
+        cp -f /opt/v2/v2ray $HOME/v2/ 
+
+    - name: Zip Release
+      uses: TheDoctor0/zip-release@0.4.1
+      with:
+        filename: v2.zip
+        path: ./v2/
+  
     - name : Upload packages
       uses: actions/upload-artifact@master
       if: always()
       with:
         name: V2-package
-        path: /opt/v2
+        path: ./v2.zip
+
+    - name: deploy file to test server
+      uses: wlixcc/SFTP-Deploy-Action@v1.0
+      with:
+          username: 'ubuntu'
+          server: '${{ secrets.FILE_SERVER_IP }}' #测试服务器地址
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+          local_path: './v2.zip'
+          remote_path: '/var/www/'
