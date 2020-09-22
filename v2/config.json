@@ -1,8 +1,5 @@
 {
-"log": {
- "loglevel": "info"
-},
-    "inbounds": [
+"inbounds": [
         {
             "port": 1234,
             "listen": "0.0.0.0",
