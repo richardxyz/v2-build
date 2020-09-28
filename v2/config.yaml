@@ -17,7 +17,7 @@ upstream:
         policies: 
             query: 
                 unhandlable_types: "deny"
-                domain: "deny:./gw.list|accept"
+                domain: ""
             reply: 
                 error_rcode: "deny"
                 cname: ""
@@ -28,7 +28,7 @@ upstream:
         policies: 
             query: 
                 unhandlable_types: "deny"
-                domain: "deny:./gw.list|accept"
+                domain: "accept:./gw.list|deny"
             reply: 
                 error_rcode: "deny"
                 cname: ""
@@ -39,7 +39,7 @@ upstream:
         policies: 
             query: 
                 unhandlable_types: "deny"
-                domain: "deny:./gw.list|accept"
+                domain: "accept:./gw.list|deny"
             reply: 
                 error_rcode: "deny"
                 cname: ""
@@ -50,7 +50,7 @@ upstream:
         policies: 
             query: 
                 unhandlable_types: "deny"
-                domain: "deny:./gw.list|accept"
+                domain: "accept:./gw.list|deny"
             reply: 
                 error_rcode: "deny"
                 cname: ""
