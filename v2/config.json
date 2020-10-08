@@ -37,6 +37,7 @@
                         "users": [
                             {
                                 "id": "a4f0879a-cc22-11e9-addc-022b2d00e40b",
+				"flow": "xtls-rprx-origin-udp443",
                                 "level": 0,
                                 "encryption": "none"
                             }
@@ -47,9 +48,9 @@
             },
             "streamSettings": {
                 "network": "tcp",
-                "security": "tls",
-                "tlsSettings": {
-                    "allowInsecure": true,
+                "security": "xtls",
+                "xtlsSettings": {
+                    "allowInsecure": false,
                     "serverName": ""
                 },
                 "wsSettings": {
