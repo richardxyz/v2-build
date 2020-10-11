@@ -6,18 +6,7 @@ upstream:
         policies: 
             query: 
                 unhandlable_types: "deny"
-                domain: ""
-            reply: 
-                error_rcode: "deny"
-                cname: ""
-                without_ip: "deny"
-                ip: "deny:./blackip.list"
-     cloudflare: 
-        server: "cloudflare"
-        policies: 
-            query: 
-                unhandlable_types: "deny"
-                domain: ""
+                domain: "deny:./gw.list|accept"
             reply: 
                 error_rcode: "deny"
                 cname: ""
@@ -33,18 +22,7 @@ upstream:
                 error_rcode: "deny"
                 cname: ""
                 without_ip: "deny"
-                ip: "deny:./blackip.list"
-     cloudflare-dot: 
-        server: "cloudflare-dot"
-        policies: 
-            query: 
-                unhandlable_types: "deny"
-                domain: "accept:./gw.list|deny"
-            reply: 
-                error_rcode: "deny"
-                cname: ""
-                without_ip: "deny"
-                ip: "deny:./blackip.list"
+                ip: ""
      containerpi-doh: 
         server: "containerpi-doh"
         policies: 
@@ -55,7 +33,7 @@ upstream:
                 error_rcode: "deny"
                 cname: ""
                 without_ip: "deny"
-                ip: "deny:./blackip.list"                    
+                ip: ""                    
 server: 
      aliyun: 
         addr: "223.5.5.5:53"
