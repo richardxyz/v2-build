@@ -37,7 +37,7 @@
                         "users": [
                             {
                                 "id": "a4f0879a-cc22-11e9-addc-022b2d00e40b",
-				"flow": "xtls-rprx-origin-udp443",
+				"flow": "xtls-rprx-direct-udp443",
                                 "level": 0,
                                 "encryption": "none"
                             }
