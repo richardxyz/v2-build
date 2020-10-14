@@ -32,7 +32,7 @@
             "settings": {
                 "vnext": [
 		    {
-                        "address": "www.woxihuan.gq",
+                        "address": "woxihuan.gq",
                         "port": 443,
                         "users": [
                             {
