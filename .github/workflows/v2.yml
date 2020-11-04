@@ -56,8 +56,11 @@ jobs:
     - name: Build source
       run: |
         export GOPATH=$(go env GOPATH) 
-        go get -insecure -u github.com/v2fly/v2ray-core/...
-        cd ${GOPATH}/src/v2ray.com/core/
+        cd $GOPATH
+        git clone --depth=1 https://github.com/v2fly/v2ray-core.git 
+        cd v2ray-core && go mod download
+        #go get -insecure -u github.com/v2fly/v2ray-core/...
+        #cd ${GOPATH}/src/v2ray.com/core/
         sed -i 's/_ "v2ray.com\/core\/main\/json"/\/\/ &/g; s/\/\/ _ "v2ray.com\/core\/main\/jsonem"/_ "v2ray.com\/core\/main\/jsonem"/g' main/distro/all/all.go
         bazel clean
         bazel build --action_env=PATH=$PATH --action_env=SPWD=$PWD --action_env=GOPATH=$(go env GOPATH) --action_env=GOCACHE=$(go env GOCACHE) --spawn_strategy local //release:v2ray_linux_mips32le_package
