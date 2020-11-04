@@ -56,7 +56,7 @@ jobs:
     - name: Build source
       run: |
         export GOPATH=$(go env GOPATH) 
-        go get -insecure -u v2ray.com/core/...
+        go get -insecure -u github.com/v2fly/v2ray-core/...
         cd ${GOPATH}/src/v2ray.com/core/
         sed -i 's/_ "v2ray.com\/core\/main\/json"/\/\/ &/g; s/\/\/ _ "v2ray.com\/core\/main\/jsonem"/_ "v2ray.com\/core\/main\/jsonem"/g' main/distro/all/all.go
         bazel clean
